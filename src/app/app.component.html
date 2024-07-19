@@ -1,0 +1,59 @@
+<div class="container">
+    <br/>
+
+    <div class="row">
+      <div class="col-md-4">
+        <input type="text" #searchInput class="form-control" id="searchInput" (keyup)="handleSearch($event)" placeholder="Search By Country Name">
+      </div>
+      <div class="col-md-4">
+        <button type="button" class="btn btn-primary" (click)="handleSortASC()">ASC</button> &nbsp;
+        <button type="button" class="btn btn-primary" (click)="handleSortDESC()">DESC</button> &nbsp;
+      </div>
+    </div>
+  
+    <br/>
+
+    <div *ngIf="displayData.length == 0">
+        <h1>No Data Found!</h1>
+    </div>
+  
+    <div class="row" *ngFor="let row of displayData">
+      <div class="col-md-2" *ngFor="let item of row">
+        <div class="card" (click)="handleOpenModal(item, content)" style="height: 280px;">
+          <img src="{{item.flags.png}}" width="100px" height="100px" class="card-img-top">
+          <div class="card-body">
+            <h5 class="card-title">{{ item.name.official }}</h5>
+            <p><span style="font-weight: bold;"> CCA2: &nbsp;</span>{{ item.cca2 }}</p>
+            <p><span style="font-weight: bold;">CCA3: &nbsp;</span>{{ item.cca3 }}</p>
+          </div>
+        </div>
+        <br/>
+      </div>
+    </div>
+  
+    <ngb-pagination *ngIf="displayData.length > 0"
+                    [(page)]="currentPage"
+                    [pageSize]="PAGE_SIZE"
+                    [collectionSize]="filteredCountryData.length"
+                    (pageChange)="handlePageChange($event)" />
+  
+    <ng-template #content let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Country Information</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+      </div>
+      <div class="modal-body">
+          <p><span style="font-weight: bold;">Official Name:&nbsp;</span>{{ selectedCountry.name.official }}</p>
+          <p><span style="font-weight: bold;">CCA2:&nbsp;</span> {{ selectedCountry.cca2 }}</p>
+          <p><span style="font-weight: bold;">CCA3:&nbsp;</span>{{ selectedCountry.cca3 }}</p>
+          <p><span style="font-weight: bold;">Native Name:&nbsp;</span>{{ selectedCountry.name.nativeName[getFirstKey(selectedCountry.name.nativeName)].official }}</p>
+          <p><span style="font-weight: bold;">Alt:&nbsp;</span>{{ selectedCountry.altSpellings }}</p>
+          <p><span style="font-weight: bold;">Root:&nbsp;</span>{{ selectedCountry.idd.root }}</p>
+          <p><span style="font-weight: bold;">Suffixes:&nbsp;</span>{{ selectedCountry.idd.suffixes }}</p>
+      </div>
+
+      <div class="modal-footer">
+      </div>
+    </ng-template>
+</div>
+  
